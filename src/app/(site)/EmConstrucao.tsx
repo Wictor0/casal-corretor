@@ -32,14 +32,12 @@ function Obra() {
   );
 }
 
-export default function EmConstrucao({ titulo, texto }: { titulo: string; texto?: string }) {
+export default function EmConstrucao({ titulo }: { titulo: string; texto?: string }) {
   return (
     <main className="s-obra">
       <div className="box s-entra">
         <Obra />
-        <span className="tag"><i />Em construção</span>
         <h1>{titulo}</h1>
-        <p>{texto ?? 'Estamos preparando esta página com carinho. Enquanto isso, fale com a gente no WhatsApp: a gente te ajuda na hora.'}</p>
         <div className="acoes">
           <a className="pill dark" href={WHATS} target="_blank" rel="noreferrer">Falar no WhatsApp<span className="seta ouro"><Seta /></span></a>
           <Link className="pill light" href="/">Voltar ao início</Link>

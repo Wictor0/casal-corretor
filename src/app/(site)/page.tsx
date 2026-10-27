@@ -92,10 +92,10 @@ export default async function Home() {
           <div className="l">
             <h2>Um casal cuidando de cada <span className="ser">negociação</span></h2>
             <p>Você fala sempre com quem conhece o imóvel de verdade. Sumaia e Allan acompanham cada visita, cada proposta e cada documento.</p>
-            <div className="s-predios" aria-hidden="true">
+            <div className="s-predios" aria-hidden="true"><div className="s-predios-in">
               <span className="px px1"><img className="flt-b" src="/home/predio-1.webp" alt="" style={{ left: '-0.9%', bottom: '21.6%', width: '37.7%', height: '61.9%' }} /></span>
               <span className="px px2"><img className="flt-a" src="/home/predio-2.webp" alt="" style={{ left: '20.9%', bottom: '10.8%', width: '50.6%', height: '86.9%' }} /></span>
-              <span className="px px3"><img className="flt-b" src="/home/predio-3.webp" alt="" style={{ left: '40.6%', bottom: '20%', width: '59%', height: '56.8%' }} /></span>
+              <span className="px px3"><img className="flt-b" src="/home/predio-3.webp" alt="" style={{ left: '40.6%', bottom: '20%', width: '59%', height: '56.8%' }} /></span></div>
             </div>
           </div>
           <div className="r">
@@ -109,7 +109,7 @@ export default async function Home() {
         </section>
 
         {lista.length > 0 && (
-          <section className="s-dest reveal">
+          <section className="s-dest reveal-t">
             <div className="box">
               <div className="top">
                 <h2>Imóveis em <span className="ser">destaque</span></h2>
