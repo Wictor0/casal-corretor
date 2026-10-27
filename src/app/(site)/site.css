@@ -235,3 +235,5 @@
 .s-dest{position:relative;z-index:2}
 .s-dest .box{box-shadow:0 -18px 40px rgba(245,243,234,.9)}
 @media (max-width:1100px){.s-predios{margin:0 auto -8%}.s-casal{gap:28px}}
+/* esconde os cortes dos recortes: fade de baixo (e da lateral direita) */
+.s-predios{-webkit-mask-image:linear-gradient(to bottom,#000 55%,transparent 92%),linear-gradient(to right,transparent 0,#000 6%,#000 88%,transparent 100%);mask-image:linear-gradient(to bottom,#000 55%,transparent 92%),linear-gradient(to right,transparent 0,#000 6%,#000 88%,transparent 100%);-webkit-mask-composite:source-in;mask-composite:intersect}
