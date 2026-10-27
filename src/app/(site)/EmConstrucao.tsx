@@ -37,7 +37,7 @@ export default function EmConstrucao({ titulo }: { titulo: string; texto?: strin
     <main className="s-obra">
       <div className="box s-entra">
         <Obra />
-        <h1>{titulo}</h1>
+        <div className="tit"><span className="sobre">Em construção</span><h1>{titulo}</h1></div>
         <div className="acoes">
           <a className="pill dark" href={WHATS} target="_blank" rel="noreferrer">Falar no WhatsApp<span className="seta ouro"><Seta /></span></a>
           <Link className="pill light" href="/">Voltar ao início</Link>

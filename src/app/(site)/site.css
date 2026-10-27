@@ -282,3 +282,5 @@
   .s-foot .c2 a{display:inline-block;align-self:flex-start}
 }
 .s a:focus-visible,.s button:focus-visible,.s summary:focus-visible{outline:2px solid var(--dourado);outline-offset:3px}
+.s-obra .tit{display:flex;flex-direction:column;align-items:center;gap:8px}
+.s-obra .sobre{font-size:12px;font-weight:300;letter-spacing:.32em;text-transform:uppercase;color:var(--dourado-texto);padding-left:.32em}
