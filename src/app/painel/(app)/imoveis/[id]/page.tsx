@@ -4,16 +4,17 @@ import { asc, eq } from 'drizzle-orm';
 import { db, t } from '@/db';
 import { NEGOCIOS, STATUS, TIPOS, ESTADOS, TOPOGRAFIAS } from '@/lib/formato';
 import { midiaUrl } from '@/lib/s3';
+import { ZONAS, exibirCodigo, ehRascunho } from '@/lib/codigo';
 import { salvarImovel, excluirImovel, enviarFoto, moverFoto, excluirFoto } from '../../actions';
 import Enviar from '../../Enviar';
 import Confirmar from '../../Confirmar';
 
 const num = (v: number | string | null) => (v == null ? '' : String(v).replace('.', ','));
 
-export default async function Editar({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ salvo?: string }> }) {
+export default async function Editar({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ salvo?: string; erro?: string }> }) {
   const id = Number((await params).id);
   if (!Number.isInteger(id)) notFound();
-  const { salvo } = await searchParams;
+  const { salvo, erro } = await searchParams;
   const [i] = await db.select().from(t.imoveis).where(eq(t.imoveis.id, id));
   if (!i) notFound();
   const [fotos, carac, marcadas] = await Promise.all([
@@ -32,9 +33,10 @@ export default async function Editar({ params, searchParams }: { params: Promise
   return (
     <div className="stack">
       <div className="topo">
-        <div><Link href="/painel" className="hint">← Imóveis</Link><h1>{i.titulo}</h1><p className="sub">{i.codigo} · {i.visivel ? 'Visível no site' : 'Oculto no site'}</p></div>
+        <div><Link href="/painel" className="hint">← Imóveis</Link><h1>{i.titulo}</h1><p className="sub">{exibirCodigo(i.codigo)}{i.zona ? ` · ${ZONAS[i.zona as keyof typeof ZONAS]}` : ''} · {i.visivel ? 'Visível no site' : 'Oculto no site'}</p></div>
       </div>
       {salvo && <div className="ok">Alterações salvas.</div>}
+      {erro === 'zona' && <div className="alerta">Pra publicar, o imóvel precisa de uma zona (ela define o código). Preencha o bairro ou escolha a zona em <b>Localização</b> e salve de novo. As outras alterações foram salvas.</div>}
 
       <section className="card">
         <div><h2>Fotos</h2><p className="hint">A primeira é a capa. Use ★ pra tornar capa e ← → pra reordenar. Pode mandar várias de uma vez, direto do celular.</p></div>
@@ -101,6 +103,19 @@ export default async function Editar({ params, searchParams }: { params: Promise
         <section className="card">
           <h2>Localização</h2>
           <div className="grid">{T('bairro', 'Bairro')}{T('cidade', 'Cidade')}</div>
+          <div className="grid2">
+            <label className="lb">Zona (define o código)
+              <select className="in" name="zona" defaultValue={i.zonaManual && i.zona ? String(i.zona) : ''}>
+                <option value="">Automática pelo bairro{i.zona && !i.zonaManual ? ` (${ZONAS[i.zona as keyof typeof ZONAS]})` : ''}</option>
+                {Object.entries(ZONAS).map(([k, v]) => <option key={k} value={k}>{k} · {v}</option>)}
+              </select>
+              <span className="hint">{i.publicadoEm && !ehRascunho(i.codigo)
+                ? <>Código <b>{i.codigo}</b> fixo: o imóvel já foi publicado e o código não muda mais.</>
+                : i.zona ? <>Código atual: <b>{exibirCodigo(i.codigo)}</b>. Fica fixo quando o imóvel for publicado.</>
+                : <>Bairro não reconhecido{i.bairro ? ` (“${i.bairro}”)` : ''}: escolha a zona aqui. Depois disso, esse bairro passa a ser reconhecido sozinho.</>}</span>
+            </label>
+            <div className="lb">Como funciona o código<span className="hint">CC + zona + número: 1 Sul, 2 Leste, 3 Oeste, 4 Norte, 5 Centro, 6 Litoral e outras cidades. Ex.: CC1001 é o 1º imóvel da Zona Sul.</span></div>
+          </div>
           <label className="lb">Endereço<input className="in" name="endereco" defaultValue={i.endereco ?? ''} /><span className="hint">Não aparece no site, fica só pra vocês. No site vai bairro e cidade.</span></label>
         </section>
 

@@ -60,6 +60,9 @@ export const imoveis = pgTable('imoveis', {
   destaque: boolean('destaque').notNull().default(false),
   destaquePrincipal: boolean('destaque_principal').notNull().default(false),
   destaqueOrdem: integer('destaque_ordem').notNull().default(0),
+  zona: integer('zona'),
+  zonaManual: boolean('zona_manual').notNull().default(false),
+  publicadoEm: timestamp('publicado_em', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 }, (t) => [index('imoveis_negocio_idx').on(t.negocio), index('imoveis_visivel_idx').on(t.visivel)]);

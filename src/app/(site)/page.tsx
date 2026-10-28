@@ -4,6 +4,7 @@ import { NEGOCIOS, TIPOS } from '@/lib/formato';
 import { bairros, construtoras, destaques, fotosSite, infoCurta, precoCurto, INSTAGRAM, WHATS } from '@/lib/site';
 import { Seta, SETA_BAIXO } from './icones';
 import Trilho from './Trilho';
+import { exibirCodigo, slugImovel } from '@/lib/codigo';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,7 +25,7 @@ const FAQS = [
   ['Não encontrei o imóvel que procuro. E agora?', 'Conte pra gente no WhatsApp como é o imóvel ideal. Buscamos opções que ainda nem estão no site e avisamos quando aparecer algo do seu jeito.'],
   ['O que são os imóveis de Terrenos e retrofit?', 'São casas antigas ou imóveis no contrapiso, procurados por quem quer reformar do zero ou aproveitar o terreno. Eles ficam separados dos outros e a visita é técnica, com hora marcada.'],
   ['Em quais regiões vocês atuam?', 'Em São Paulo e no litoral paulista. Não ficamos presos a um bairro: muitos clientes chegam por indicação, e a gente vai até onde estiver o imóvel certo pra você.'],
-  ['Como agendo uma visita?', 'É só chamar a Sumaia ou o Allan no WhatsApp com o código do imóvel (por exemplo, CC-0001). A gente combina o melhor horário pra você.'],
+  ['Como agendo uma visita?', 'É só chamar a Sumaia ou o Allan no WhatsApp com o código do imóvel (por exemplo, CC1001). A gente combina o melhor horário pra você.'],
 ];
 const PASSOS = [
   { titulo: 'Conversa e curadoria', texto: 'Entendemos o que você procura, seu momento e seu orçamento, e montamos uma seleção sob medida.' },
@@ -65,9 +66,9 @@ export default async function Home() {
               <a href={INSTAGRAM} target="_blank" rel="noreferrer">2.500+ no Instagram</a>
             </div>
             {semana && (
-              <Link className="s-sem" href={`/imovel/${semana.codigo}`}>
+              <Link className="s-sem" href={`/imovel/${slugImovel(semana)}`}>
                 <span style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                  <small>Destaque da semana · {semana.codigo}</small>
+                  <small>Destaque da semana · {exibirCodigo(semana.codigo)}</small>
                   <b>{semana.titulo}{semana.bairro ? ` · ${semana.bairro}` : ''}</b>
                 </span>
                 <span className="seta"><Seta /></span>
@@ -84,7 +85,7 @@ export default async function Home() {
           </div>
           <label className="c"><span>Tipo</span><select name="tipo" defaultValue=""><option value="">Todos os tipos</option>{TIPOS.map((t) => <option key={t}>{t}</option>)}</select></label>
           <label className="c"><span>Bairro ou cidade</span><input name="local" placeholder="Ex.: Vila Mariana" /></label>
-          <label className="c" style={{ flexBasis: 140 }}><span>Código</span><input name="codigo" placeholder="CC-0000" /></label>
+          <label className="c" style={{ flexBasis: 140 }}><span>Código</span><input name="codigo" placeholder="CC1001" /></label>
           <button type="submit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" /></svg>Buscar</button>
         </form>
 
@@ -117,7 +118,7 @@ export default async function Home() {
               </div>
               <Trilho rotulo="Imóveis em destaque" extra={<Link className="pill dark" href="/imoveis">Ver todos os imóveis<span className="seta"><Seta d={SETA_BAIXO} /></span></Link>}>
                   {lista.map((p, i) => (
-                    <Link key={p.id} href={`/imovel/${p.codigo}`} className="s-card lift zoom" style={{ background: TONS[i % 4] }}>
+                    <Link key={p.id} href={`/imovel/${slugImovel(p)}`} className="s-card lift zoom" style={{ background: TONS[i % 4] }}>
                       {p.thumb && <img src={midiaUrl(p.thumb)} alt="" loading="lazy" />}
                       <span className="tp">
                         <span>{NEGOCIOS[p.negocio] === 'Terrenos e retrofit' ? 'Retrofit' : NEGOCIOS[p.negocio]}</span>

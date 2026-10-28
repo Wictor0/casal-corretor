@@ -7,6 +7,8 @@ import { exigirUsuario } from '@/lib/auth';
 import { processarFoto, processarLogo } from '@/lib/imagens';
 import { apagar } from '@/lib/s3';
 import { int, dec, txt, CHAVES_FOTO, MAX_DESTAQUES } from '@/lib/formato';
+import { atribuirCodigo, zonaAutomatica } from '@/lib/codigos-db';
+import { ZONAS } from '@/lib/codigo';
 
 const rv = () => revalidatePath('/', 'layout');
 
@@ -15,13 +17,20 @@ export async function criarImovel(fd: FormData) {
   await exigirUsuario();
   const negocio = (String(fd.get('negocio') || 'venda')) as 'venda' | 'aluguel' | 'terreno';
   const [r] = await db.insert(t.imoveis).values({ codigo: 'tmp-' + crypto.randomUUID(), titulo: 'Novo imóvel', negocio, tipo: negocio === 'terreno' ? 'Casa' : 'Apartamento' }).returning({ id: t.imoveis.id });
-  await db.update(t.imoveis).set({ codigo: 'CC-' + String(r.id).padStart(4, '0') }).where(eq(t.imoveis.id, r.id));
+  await db.update(t.imoveis).set({ codigo: 'R' + r.id }).where(eq(t.imoveis.id, r.id));
   redirect(`/painel/imoveis/${r.id}`);
 }
 
 export async function salvarImovel(id: number, fd: FormData) {
   await exigirUsuario();
   const negocio = String(fd.get('negocio')) as 'venda' | 'aluguel' | 'terreno';
+  const bairro = txt(fd.get('bairro')), cidade = txt(fd.get('cidade'));
+  const zSel = Number(fd.get('zona'));
+  const zonaManual = zSel in ZONAS;
+  const zona = zonaManual ? zSel : await zonaAutomatica(bairro, cidade, id);
+  const [antes] = await db.select({ pub: t.imoveis.publicadoEm }).from(t.imoveis).where(eq(t.imoveis.id, id));
+  const querVisivel = fd.get('visivel') === 'on';
+  const semZona = querVisivel && !zona;
   const videos = String(fd.get('videos') || '').split(/\s+/).map((s) => s.trim()).filter((s) => /^https?:\/\//.test(s));
   await db.update(t.imoveis).set({
     titulo: txt(fd.get('titulo')) || 'Sem título',
@@ -29,11 +38,12 @@ export async function salvarImovel(id: number, fd: FormData) {
     status: (String(fd.get('status')) as 'disponivel' | 'negociacao' | 'vendido'),
     preco: int(fd.get('preco')), condominio: int(fd.get('condominio')), iptu: int(fd.get('iptu')),
     area: dec(fd.get('area')), quartos: int(fd.get('quartos')), suites: int(fd.get('suites')), banheiros: int(fd.get('banheiros')), vagas: int(fd.get('vagas')),
-    andar: txt(fd.get('andar')), bairro: txt(fd.get('bairro')), cidade: txt(fd.get('cidade')), endereco: txt(fd.get('endereco')),
+    andar: txt(fd.get('andar')), bairro, cidade, zona, zonaManual, endereco: txt(fd.get('endereco')),
     descricao: txt(fd.get('descricao')), videos,
     areaTerreno: dec(fd.get('areaTerreno')), frente: dec(fd.get('frente')), fundo: dec(fd.get('fundo')), areaConstruida: dec(fd.get('areaConstruida')),
     estadoImovel: txt(fd.get('estadoImovel')), topografia: txt(fd.get('topografia')), zoneamento: txt(fd.get('zoneamento')),
-    visivel: fd.get('visivel') === 'on',
+    visivel: querVisivel && !semZona,
+    ...(querVisivel && !semZona && !antes?.pub ? { publicadoEm: new Date() } : {}),
     updatedAt: new Date(),
   }).where(eq(t.imoveis.id, id));
   // características
@@ -45,8 +55,9 @@ export async function salvarImovel(id: number, fd: FormData) {
     const s = txt(v); return s ? [{ imovelId: id, caracteristicaId: c.id, valor: s }] : [];
   });
   if (linhas.length) await db.insert(t.imovelCaracteristicas).values(linhas);
+  await atribuirCodigo(id);
   rv();
-  redirect(`/painel/imoveis/${id}?salvo=1`);
+  redirect(`/painel/imoveis/${id}?${semZona ? 'erro=zona' : 'salvo=1'}`);
 }
 
 export async function excluirImovel(id: number) {
@@ -70,7 +81,11 @@ export async function alternar(id: number, campo: 'visivel' | 'destaque') {
     const [{ m }] = await db.select({ m: sql<number>`coalesce(max(${t.imoveis.destaqueOrdem}),0)` }).from(t.imoveis);
     await db.update(t.imoveis).set({ destaque: true, destaqueOrdem: Number(m) + 1 }).where(eq(t.imoveis.id, id));
   } else {
-    await db.update(t.imoveis).set({ visivel: sql`not ${col}` }).where(eq(t.imoveis.id, id));
+    const [i] = await db.select({ v: t.imoveis.visivel, zona: t.imoveis.zona, pub: t.imoveis.publicadoEm }).from(t.imoveis).where(eq(t.imoveis.id, id));
+    if (!i) return;
+    if (!i.v && !i.zona) redirect(`/painel/imoveis/${id}?erro=zona`);
+    await db.update(t.imoveis).set({ visivel: !i.v, ...(!i.v && !i.pub ? { publicadoEm: new Date() } : {}) }).where(eq(t.imoveis.id, id));
+    await atribuirCodigo(id);
   }
   rv();
 }
