@@ -6,7 +6,7 @@ import { exibirCodigo, lerCodigo, slugImovel } from '@/lib/codigo';
 import { midiaUrl } from '@/lib/s3';
 import { NEGOCIOS } from '@/lib/formato';
 import { CONTATOS, fotosSite, WHATS } from '@/lib/site';
-import { Seta } from '../../icones';
+import { Seta } from '../../../icones';
 import Galeria from './Galeria';
 import Descricao from './Descricao';
 

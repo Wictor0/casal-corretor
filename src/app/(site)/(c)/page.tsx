@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { midiaUrl } from '@/lib/s3';
 import { NEGOCIOS, TIPOS } from '@/lib/formato';
 import { bairros, construtoras, destaques, fotosSite, infoCurta, precoCurto, INSTAGRAM, WHATS } from '@/lib/site';
-import { Seta, SETA_BAIXO } from './icones';
-import Trilho from './Trilho';
+import { Seta, SETA_BAIXO } from '../icones';
+import Trilho from '../Trilho';
 import { exibirCodigo, slugImovel } from '@/lib/codigo';
 
 export const dynamic = 'force-dynamic';

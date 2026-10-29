@@ -1,4 +1,4 @@
-import { Obra } from './EmConstrucao';
+import { Obra } from '../EmConstrucao';
 
 // Aparece enquanto a próxima página busca os dados (só se demorar mais que um instante).
 export default function Carregando() {
