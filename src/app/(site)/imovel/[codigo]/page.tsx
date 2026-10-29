@@ -8,6 +8,7 @@ import { NEGOCIOS } from '@/lib/formato';
 import { CONTATOS, fotosSite, WHATS } from '@/lib/site';
 import { Seta } from '../../icones';
 import Galeria from './Galeria';
+import Descricao from './Descricao';
 
 export const dynamic = 'force-dynamic';
 type P = { params: Promise<{ codigo: string }> };
@@ -99,7 +100,7 @@ export default async function Imovel({ params }: P) {
           {i.descricao && (
             <div className="bloco">
               <h2>{terreno ? 'Sobre a oportunidade' : 'Sobre o imóvel'}</h2>
-              {i.descricao.split(/\n\s*\n/).map((p, k) => <p key={k} className="txt">{p}</p>)}
+              <Descricao texto={i.descricao} extras={[i.bairro ?? '', i.cidade ?? '', i.titulo]} />
             </div>
           )}
 
