@@ -1,5 +1,6 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 type Foto = { full: string; thumb: string };
 
@@ -50,7 +51,7 @@ export default function Galeria({ fotos, titulo, codigo }: { fotos: Foto[]; titu
           })}
         </div>
       )}
-      {aberta != null && (
+      {aberta != null && createPortal(
         <div className="s-lb" role="dialog" aria-modal="true" aria-label="Fotos do imóvel" onClick={() => setAberta(null)}
           onTouchStart={(e) => { toque.current = e.touches[0].clientX; }}
           onTouchEnd={(e) => { if (toque.current == null) return; const dx = e.changedTouches[0].clientX - toque.current; if (Math.abs(dx) > 40) mover(dx < 0 ? 1 : -1); toque.current = null; }}>
@@ -61,7 +62,8 @@ export default function Galeria({ fotos, titulo, codigo }: { fotos: Foto[]; titu
             <button type="button" className="prox" aria-label="Próxima foto" onClick={(e) => { e.stopPropagation(); mover(1); }}>›</button>
             <span className="cont">{aberta + 1} / {n}</span>
           </>}
-        </div>
+        </div>,
+        document.body,
       )}
     </div>
   );

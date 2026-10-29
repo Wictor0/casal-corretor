@@ -543,3 +543,13 @@
   .s-gal .lado:has(> :nth-child(3):last-child) > :first-child{grid-column:auto}
   .s-gal .lado button{aspect-ratio:1;height:auto}
 }
+
+/* números do imóvel com ícones */
+.s-imv ul.specs{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:10px}
+.s-imv ul.specs li{display:flex;align-items:center;gap:10px;background:var(--off);border-radius:40px;padding:6px 18px 6px 6px;font-size:15px;font-weight:500;color:var(--grafite)}
+.s-imv ul.specs i{width:38px;height:38px;flex:none;border-radius:50%;background:#fff;color:var(--dourado-texto);display:flex;align-items:center;justify-content:center}
+@media (max-width:900px){.s-imv ul.specs{display:grid;grid-template-columns:1fr 1fr;gap:8px}.s-imv ul.specs li{font-size:14px}}
+
+/* lightbox fora da página (portal no body): cobre tudo, inclusive o cabeçalho */
+.s-lb{z-index:1000;font-family:var(--sans)}
+html:has(.s-lb){overflow:hidden}

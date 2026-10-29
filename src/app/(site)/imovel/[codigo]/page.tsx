@@ -62,10 +62,26 @@ export default async function Imovel({ params }: P) {
   const palavras = i.titulo.trim().split(/\s+/);
   const corte = palavras.length >= 4 ? palavras.length - 2 : palavras.length;
 
+  const IC = {
+    area: 'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5',
+    quarto: 'M3 18v-7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v7M3 14h18M6 9V7h5v2M13 9V7h5v2M3 18v2M21 18v2',
+    suite: 'M6 21V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17M4 21h16M14.5 12h.01',
+    banho: 'M4 12h16v3a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM6 12V6a2 2 0 0 1 4 0M7 20l-1 2M17 20l1 2',
+    vaga: 'M3 13l2-5.5A2 2 0 0 1 7 6h10a2 2 0 0 1 2 1.5L21 13v4H3zM5 17v2M19 17v2M7 14h.01M17 14h.01',
+    andar: 'M4 20h4v-4h4v-4h4V8h4',
+    frente: 'M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4',
+    fundo: 'M12 3v18M8 7l4-4 4 4M8 17l4 4 4-4',
+    casa: 'M3 11l9-7 9 7M5 10v10h14V10',
+    topo: 'M3 20l6-10 4 6 3-4 5 8z',
+    zona: 'M9 4L3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14',
+  };
+  const pl = (n: number | null, um: string, varios: string) => (n ? `${n} ${n === 1 ? um : varios}` : null);
   const specs = (terreno
-    ? [[num(i.areaTerreno), 'm² de terreno'], [i.frente && `${num(i.frente)} m`, 'de frente'], [i.fundo && `${num(i.fundo)} m`, 'de fundo'], [num(i.areaConstruida), 'm² construídos'], [i.topografia, 'topografia'], [i.zoneamento, 'zoneamento']]
-    : [[num(i.area), 'm² úteis'], [i.quartos, i.quartos === 1 ? 'quarto' : 'quartos'], [i.suites, i.suites === 1 ? 'suíte' : 'suítes'], [i.banheiros, i.banheiros === 1 ? 'banheiro' : 'banheiros'], [i.vagas, i.vagas === 1 ? 'vaga' : 'vagas'], [i.andar, 'andar']]
-  ).filter(([v]) => v != null && v !== '' && v !== 0) as [string | number, string][];
+    ? [[IC.area, num(i.areaTerreno) && `${num(i.areaTerreno)} m² de terreno`], [IC.frente, i.frente && `${num(i.frente)} m de frente`], [IC.fundo, i.fundo && `${num(i.fundo)} m de fundo`],
+       [IC.casa, num(i.areaConstruida) && `${num(i.areaConstruida)} m² construídos`], [IC.topo, i.topografia && `Terreno ${i.topografia.toLowerCase()}`], [IC.zona, i.zoneamento && `Zoneamento ${i.zoneamento}`]]
+    : [[IC.area, num(i.area) && `${num(i.area)} m²`], [IC.quarto, pl(i.quartos, 'quarto', 'quartos')], [IC.suite, pl(i.suites, 'suíte', 'suítes')],
+       [IC.banho, pl(i.banheiros, 'banheiro', 'banheiros')], [IC.vaga, pl(i.vagas, 'vaga', 'vagas')], [IC.andar, i.andar && `${i.andar} andar`]]
+  ).filter(([, v]) => v) as [string, string][];
   const carac = i.carac.map((c) => (c.tipo === 'simnao' ? c.nome : `${c.nome}: ${c.valor}`));
   if (terreno && i.estadoImovel) carac.unshift(i.estadoImovel);
   const videos = i.videos.map((u) => ({ u, e: embed(u) }));
@@ -94,7 +110,7 @@ export default async function Imovel({ params }: P) {
             </div>
             <h1>{palavras.slice(0, corte).join(' ')}{corte < palavras.length && <> <span className="ser">{palavras.slice(corte).join(' ')}</span></>}</h1>
             {local && <span className="end">{local}</span>}
-            {specs.length > 0 && <div className="specs">{specs.map(([v, l]) => <div key={l}><b>{v}</b><span>{l}</span></div>)}</div>}
+            {specs.length > 0 && <ul className="specs">{specs.map(([d, v]) => <li key={v}><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={d} /></svg></i>{v}</li>)}</ul>}
           </div>
 
           {i.descricao && (
