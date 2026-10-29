@@ -174,7 +174,6 @@ export default async function Imovel({ params }: P) {
             {!terreno && m2 > 0 && <span className="nota">≈ {brl(Math.round(i.preco! / m2))}/m²</span>}
             {terreno && <span className="nota">Preço do imóvel no estado atual. Reforma e projeto ficam por conta do comprador.</span>}
             <a className="cta" href={`${WHATS}?text=${msg}`} target="_blank" rel="noreferrer">{terreno ? 'Quero analisar essa oportunidade' : 'Tenho interesse'}<span><Seta /></span></a>
-            <span className="nota">A mensagem já vai pronta no WhatsApp: <em>“Olá! Tenho interesse no imóvel {codigo}.”</em></span>
           </div>
           {i.status === 'negociacao' && <div className="bloco aviso"><b>Em negociação, mas ainda aceita propostas</b><span>Fale com a gente antes que feche.</span></div>}
           {i.status === 'vendido' && <div className="bloco aviso"><b>Esse já foi {aluguel ? 'alugado' : 'vendido'}</b><span>Mas a gente encontra outro do seu jeito.</span></div>}

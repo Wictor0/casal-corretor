@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 type Foto = { full: string; thumb: string };
 
 export default function Galeria({ fotos, titulo, codigo }: { fotos: Foto[]; titulo: string; codigo: string }) {
-  const [atual, setAtual] = useState(0);
+  const atual = 0;
   const [aberta, setAberta] = useState<number | null>(null);
   const [copiado, setCopiado] = useState(false);
   const toque = useRef<number | null>(null);
@@ -43,7 +43,7 @@ export default function Galeria({ fotos, titulo, codigo }: { fotos: Foto[]; titu
           {lado.map((f, k) => {
             const idx = k + 1, ultima = k === lado.length - 1 && n > 5;
             return (
-              <button type="button" key={idx} className={atual === idx ? 'on' : undefined} onClick={() => (ultima ? setAberta(idx) : setAtual(idx))} aria-label={ultima ? `Ver todas as ${n} fotos` : `Ver foto ${idx + 1}`}>
+              <button type="button" key={idx} onClick={() => setAberta(idx)} aria-label={ultima ? `Ver todas as ${n} fotos` : `Ver foto ${idx + 1}`}>
                 <img src={f.thumb} alt="" loading="lazy" />
                 {ultima && <span className="mais">+ {n - 5} fotos</span>}
               </button>

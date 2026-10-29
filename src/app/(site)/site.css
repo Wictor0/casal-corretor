@@ -553,3 +553,16 @@
 /* lightbox fora da página (portal no body): cobre tudo, inclusive o cabeçalho */
 .s-lb{z-index:1000;font-family:var(--sans)}
 html:has(.s-lb){overflow:hidden}
+
+/* ===== transição entre páginas ===== */
+@keyframes s-pag-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.s-pag{animation:s-pag-in .55s cubic-bezier(.2,.7,.2,1)}
+.s-prog{position:fixed;top:0;left:0;height:3px;width:100%;z-index:2000;background:var(--dourado);transform-origin:left;transform:scaleX(0);opacity:0;pointer-events:none}
+.s-prog.indo{opacity:1;transform:scaleX(.85);transition:transform 8s cubic-bezier(.05,.7,.1,1),opacity .2s}
+.s-prog.fim{opacity:0;transform:scaleX(1);transition:transform .25s ease,opacity .35s ease .2s}
+@media (prefers-reduced-motion: reduce){.s-pag{animation:none}}
+/* carregamento entre páginas: a casinha em construção */
+@keyframes s-aparece{to{opacity:1}}
+.s-carrega{min-height:62vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;opacity:0;animation:s-aparece .4s ease .25s forwards}
+.s-carrega .obra-svg{width:150px}
+.s-carrega span{font-size:12px;font-weight:300;letter-spacing:.32em;text-transform:uppercase;color:var(--dourado-texto);padding-left:.32em}

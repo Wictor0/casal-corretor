@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { WHATS } from '@/lib/site';
 import { Seta } from './icones';
 
-function Obra() {
+export function Obra() {
   // Casa sendo erguida: blocos sobem um a um, telhado desce, porta e janelas acendem; a grua balança.
   const blocos = [
     { x: 60, y: 150, w: 44, h: 26, d: 0 }, { x: 104, y: 150, w: 44, h: 26, d: 0.25, b2: true }, { x: 148, y: 150, w: 44, h: 26, d: 0.5 },

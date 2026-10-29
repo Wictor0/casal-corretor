@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import './site.css';
+import { Suspense } from 'react';
 import Header from './Header';
+import Progresso from './Progresso';
 import { Seta } from './icones';
 import { CONTATOS, INSTAGRAM, WHATS } from '@/lib/site';
 
@@ -13,6 +15,7 @@ export const metadata: Metadata = {
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="s">
+      <Suspense fallback={null}><Progresso /></Suspense>
       <Header whats={WHATS} />
       {children}
       <footer className="s-foot">
