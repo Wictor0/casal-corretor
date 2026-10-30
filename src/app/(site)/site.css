@@ -713,7 +713,7 @@ html:has(.s-lb){overflow:hidden}
 .s-sb .quem p,.s-sb .historia .r p{margin:0;font-size:14px;line-height:1.75;color:#3F3933}
 .s-sb .quem .lado{flex:1 1 220px;min-height:240px;background:var(--areia);border-radius:120px 0 0 120px;display:flex;align-items:center;justify-content:center}
 .s-sb .quem .lado img{width:46%;opacity:.85}
-.s .s-sb .duplas{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.s .s-sb .duplas{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:16px}
 .s-sb .duplas>div{background:var(--grafite);color:var(--off);border-radius:28px;padding:14px;display:flex;gap:18px;align-items:center}
 .s-sb .duplas img,.s-sb .duplas i{width:130px;height:162px;flex:none;border-radius:20px;object-fit:cover;background:var(--cafe)}
 .s-sb .duplas span{display:flex;flex-direction:column;gap:6px;padding-right:10px}
@@ -747,7 +747,7 @@ html:has(.s-lb){overflow:hidden}
 .s-sb .fecho>div{background:var(--areia);border-radius:32px;padding:clamp(36px,5vw,64px);display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center}
 .s-sb .fecho p{margin:0;font-family:var(--serif);font-style:italic;font-size:clamp(26px,3vw,38px);line-height:1.3;max-width:760px;color:var(--cafe)}
 .s-sb .fecho p span{color:var(--dourado-texto)}
-@media (max-width:640px){.s-sb .hero{min-height:420px}.s-sb .duplas>div{flex-direction:column;align-items:flex-start}.s-sb .duplas img,.s-sb .duplas i{width:100%;height:auto;aspect-ratio:4/5}.s-sb .como details p{padding:0 24px 24px}.s-sb .historia .l{position:static}.s-sb .numeros b{font-size:44px}}
+@media (max-width:640px){.s-sb .hero{min-height:420px}.s-sb .duplas>div{align-items:flex-start;gap:14px}.s-sb .duplas img,.s-sb .duplas i{width:96px;height:120px;border-radius:16px}.s-sb .duplas b{font-size:19px}.s-sb .duplas span{padding-right:4px}.s-sb .como details p{padding:0 24px 24px}.s-sb .historia .l{position:static}.s-sb .numeros b{font-size:44px}}
 @media (hover:hover){.s-sb .pill.claro:hover{background:var(--grafite);color:var(--off)}.s-sb .pill.claro:hover .seta{background:var(--dourado);color:var(--grafite)}}
 
 /* foto do casal 16:9: mostra inteira no computador; no celular corta mantendo os rostos (parte de cima) */
