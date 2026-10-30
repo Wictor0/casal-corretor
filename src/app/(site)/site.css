@@ -751,5 +751,6 @@ html:has(.s-lb){overflow:hidden}
 @media (hover:hover){.s-sb .pill.claro:hover{background:var(--grafite);color:var(--off)}.s-sb .pill.claro:hover .seta{background:var(--dourado);color:var(--grafite)}}
 
 /* foto do casal 16:9: mostra inteira no computador; no celular corta mantendo os rostos (parte de cima) */
-.s-sb .hero{aspect-ratio:16/9;min-height:420px}
+.s-sb .hero{width:100%;min-width:0;min-height:420px}
+@media (min-width:900px){.s-sb .hero{aspect-ratio:16/9;min-height:0;max-height:720px}}
 .s-sb .hero>img{object-position:center 22%}
