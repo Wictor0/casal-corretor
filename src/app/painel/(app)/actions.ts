@@ -114,7 +114,8 @@ export async function enviarFoto(imovelId: number, fd: FormData) {
   const file = fd.get('foto');
   if (!(file instanceof File) || !file.size) return { erro: 'Arquivo vazio' };
   if (file.size > 25 * 1024 * 1024) return { erro: 'Foto muito grande (máx. 25 MB)' };
-  const r = await processarFoto(file, `imoveis/${imovelId}`);
+  let r;
+  try { r = await processarFoto(file, `imoveis/${imovelId}`); } catch (e) { console.error('[foto]', e); return { erro: 'Não consegui ler essa imagem. Tente salvar como JPG ou PNG.' }; }
   const [{ m }] = await db.select({ m: sql<number>`coalesce(max(${t.fotos.ordem}),-1)` }).from(t.fotos).where(eq(t.fotos.imovelId, imovelId));
   await db.insert(t.fotos).values({ imovelId, ...r, ordem: Number(m) + 1 });
   rv();
@@ -224,7 +225,8 @@ export async function enviarFotoSite(chave: string, fd: FormData) {
   await exigirUsuario();
   if (!(CHAVES_FOTO as readonly string[]).includes(chave)) return { erro: 'Campo inválido' };
   const file = fd.get('foto'); if (!(file instanceof File) || !file.size) return { erro: 'Arquivo vazio' };
-  const r = await processarFoto(file, 'site', { max: 2000, thumb: 600 });
+  let r;
+  try { r = await processarFoto(file, 'site', { max: 2400, thumb: 900 }); } catch (e) { console.error('[foto-site]', e); return { erro: 'Não consegui ler essa imagem. Tente salvar como JPG ou PNG.' }; }
   const [antigo] = await db.select().from(t.configuracoes).where(eq(t.configuracoes.chave, chave));
   await db.insert(t.configuracoes).values({ chave, valor: r, updatedAt: new Date() }).onConflictDoUpdate({ target: t.configuracoes.chave, set: { valor: r, updatedAt: new Date() } });
   const v = antigo?.valor as { key?: string; thumbKey?: string } | null;

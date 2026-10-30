@@ -640,3 +640,6 @@ html:has(.s-lb){overflow:hidden}
   .s-ct .cartao.escuro .pill:hover{background:var(--dourado-claro);color:var(--grafite)}
 }
 @media (max-width:640px){.s-ct .fone{font-size:26px}.s-ct .ig{min-height:0}}
+
+/* retrato vertical usado como bolinha (quando ainda não há recorte próprio): puxa pro rosto */
+.s-ct .quem img,.s-imv .corretores img{object-position:center 20%}

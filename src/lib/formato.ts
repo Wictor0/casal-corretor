@@ -7,11 +7,13 @@ export const TOPOGRAFIAS = ['Plano', 'Aclive', 'Declive'];
 export const int = (v: FormDataEntryValue | null) => { const s = String(v ?? '').replace(/\D/g, ''); return s ? Number(s) : null; };
 export const dec = (v: FormDataEntryValue | null) => { const s = String(v ?? '').trim().replace(/\./g, '').replace(',', '.'); return s && !isNaN(Number(s)) ? s : null; };
 export const txt = (v: FormDataEntryValue | null) => { const s = String(v ?? '').trim(); return s || null; };
-export const CHAVES_FOTO = ['foto_casal', 'foto_sumaia', 'foto_allan'] as const;
+export const CHAVES_FOTO = ['foto_casal', 'foto_sumaia', 'foto_allan', 'bola_sumaia', 'bola_allan'] as const;
 export const ROTULO_FOTO: Record<(typeof CHAVES_FOTO)[number], { t: string; s: string }> = {
   foto_casal: { t: 'Foto do casal', s: 'Aparece na página inicial e no topo do Sobre. Horizontal fica melhor.' },
   foto_sumaia: { t: 'Foto da Sumaia', s: 'Retrato individual na página Sobre. Vertical fica melhor.' },
   foto_allan: { t: 'Foto do Allan', s: 'Retrato individual na página Sobre. Vertical fica melhor.' },
+  bola_sumaia: { t: 'Bolinha da Sumaia', s: 'Foto redonda dos contatos e da página do imóvel.' },
+  bola_allan: { t: 'Bolinha do Allan', s: 'Foto redonda dos contatos e da página do imóvel.' },
 };
 export const MAX_DESTAQUES = 8;
 export const STATUS_PARCEIRO = { nova: 'Nova', analise: 'Em análise', aprovado: 'Aprovado', recusado: 'Recusado' } as const;

@@ -13,7 +13,7 @@ const INFOS = [
 
 export default async function Contato() {
   const fs = await fotosSite();
-  const fotos = [fs.foto_sumaia, fs.foto_allan];
+  const fotos = [fs.bola_sumaia ?? fs.foto_sumaia, fs.bola_allan ?? fs.foto_allan];
   const papel = ['Corretora', 'Corretor'];
   return (
     <main className="s-ct">

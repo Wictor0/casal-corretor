@@ -86,7 +86,7 @@ export default async function Imovel({ params }: P) {
   if (terreno && i.estadoImovel) carac.unshift(i.estadoImovel);
   const videos = i.videos.map((u) => ({ u, e: embed(u) }));
   const m2 = i.preco && !aluguel ? (terreno ? Number(i.areaTerreno) : Number(i.area)) : 0;
-  const fotoCorretor = [fs.foto_sumaia, fs.foto_allan];
+  const fotoCorretor = [fs.bola_sumaia ?? fs.foto_sumaia, fs.bola_allan ?? fs.foto_allan];
 
   return (
     <main className="s-imv">
