@@ -10,6 +10,8 @@ import { CONTATOS, INSTAGRAM, WHATS } from '@/lib/site';
 export const metadata: Metadata = {
   title: { default: 'Casal Corretor · Negócios Imobiliários', template: '%s · Casal Corretor' },
   description: 'Curadoria de lares com personalidade para quem vive São Paulo com estilo. Atendimento a dois, do primeiro contato às chaves.',
+  robots: { index: true, follow: true },
+  metadataBase: process.env.APP_URL ? new URL(process.env.APP_URL) : undefined,
 };
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
