@@ -9,7 +9,7 @@ export const dec = (v: FormDataEntryValue | null) => { const s = String(v ?? '')
 export const txt = (v: FormDataEntryValue | null) => { const s = String(v ?? '').trim(); return s || null; };
 export const CHAVES_FOTO = ['foto_casal', 'foto_sumaia', 'foto_allan', 'bola_sumaia', 'bola_allan'] as const;
 export const ROTULO_FOTO: Record<(typeof CHAVES_FOTO)[number], { t: string; s: string }> = {
-  foto_casal: { t: 'Foto do casal', s: 'Aparece só na página Sobre. Horizontal fica melhor.' },
+  foto_casal: { t: 'Foto do casal', s: 'Topo da página Sobre. Formato horizontal 16:9.' },
   foto_sumaia: { t: 'Foto da Sumaia', s: 'Retrato individual na página Sobre. Vertical fica melhor.' },
   foto_allan: { t: 'Foto do Allan', s: 'Retrato individual na página Sobre. Vertical fica melhor.' },
   bola_sumaia: { t: 'Bolinha da Sumaia', s: 'Foto redonda dos contatos e da página do imóvel.' },

@@ -19,11 +19,11 @@ export default async function Site() {
           return (
             <section className="card" key={k}>
               <div><h2>{ROTULO_FOTO[k].t}</h2><p className="hint">{ROTULO_FOTO[k].s}</p></div>
-              <div className="foto" style={{ aspectRatio: k === 'foto_casal' ? '4/3' : '4/5' }}>
+              <div className="foto" style={{ aspectRatio: k === 'foto_casal' ? '16/9' : '4/5' }}>
                 {f ? <img src={midiaUrl(f.thumbKey) + '?v=' + encodeURIComponent(f.key)} alt={ROTULO_FOTO[k].t} /> : <div className="vazio" style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Sem foto ainda</div>}
               </div>
               <Recorte acao={enviarFotoSite.bind(null, k)} atual={f ? midiaUrl(f.key) : undefined} titulo={ROTULO_FOTO[k].t}
-                proporcao={k === 'foto_casal' ? 4 / 3 : 4 / 5} largura={k === 'foto_casal' ? 2400 : 1400} />
+                proporcao={k === 'foto_casal' ? 16 / 9 : 4 / 5} largura={k === 'foto_casal' ? 2400 : 1400} />
               {bk && (
                 <div className="bola-bloco">
                   <div className="row" style={{ gap: 14 }}>

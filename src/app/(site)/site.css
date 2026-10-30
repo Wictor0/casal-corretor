@@ -749,3 +749,7 @@ html:has(.s-lb){overflow:hidden}
 .s-sb .fecho p span{color:var(--dourado-texto)}
 @media (max-width:640px){.s-sb .hero{min-height:420px}.s-sb .duplas>div{flex-direction:column;align-items:flex-start}.s-sb .duplas img,.s-sb .duplas i{width:100%;height:auto;aspect-ratio:4/5}.s-sb .como details p{padding:0 24px 24px}.s-sb .historia .l{position:static}.s-sb .numeros b{font-size:44px}}
 @media (hover:hover){.s-sb .pill.claro:hover{background:var(--grafite);color:var(--off)}.s-sb .pill.claro:hover .seta{background:var(--dourado);color:var(--grafite)}}
+
+/* foto do casal 16:9: mostra inteira no computador; no celular corta mantendo os rostos (parte de cima) */
+.s-sb .hero{aspect-ratio:16/9;min-height:420px}
+.s-sb .hero>img{object-position:center 22%}
