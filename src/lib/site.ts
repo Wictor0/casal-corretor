@@ -52,3 +52,12 @@ export const precoCurto = (p: { preco: number | null; negocio: string }) => {
 export const infoCurta = (p: { area: string | null; quartos: number | null; vagas: number | null }) =>
   [p.area ? `${String(Number(p.area)).replace('.', ',')} m²` : null, p.quartos ? `${p.quartos} quarto${p.quartos > 1 ? 's' : ''}` : null, p.vagas ? `${p.vagas} vaga${p.vagas > 1 ? 's' : ''}` : null]
     .filter(Boolean).join(' · ');
+
+/** Capa do imóvel publicado mais recente (pro topo da home quando não há destaque). */
+export async function ultimaCapa() {
+  const [r] = await db.select({ key: sql<string>`f.key` }).from(t.imoveis)
+    .innerJoin(sql`fotos f`, sql`f.imovel_id = ${t.imoveis.id}`)
+    .where(and(eq(t.imoveis.visivel, true), sql`${t.imoveis.status} <> 'vendido'`))
+    .orderBy(sql`${t.imoveis.publicadoEm} desc nulls last`, desc(t.imoveis.id), sql`f.ordem`, sql`f.id`).limit(1);
+  return r?.key ?? null;
+}

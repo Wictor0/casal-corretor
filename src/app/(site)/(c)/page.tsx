@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { midiaUrl } from '@/lib/s3';
 import { NEGOCIOS, TIPOS } from '@/lib/formato';
-import { bairros, construtoras, destaques, fotosSite, infoCurta, precoCurto, INSTAGRAM, WHATS } from '@/lib/site';
+import { bairros, construtoras, destaques, infoCurta, precoCurto, ultimaCapa, INSTAGRAM, WHATS } from '@/lib/site';
 import { Seta, SETA_BAIXO } from '../icones';
 import Trilho from '../Trilho';
 import Segmentado from '../Segmentado';
@@ -37,10 +37,9 @@ const BAIRROS_PADRAO = ['Vila Mariana', 'Bela Vista', 'Mooca', 'Vila Prudente'];
 const TONS = ['#5A4B42', '#6B6F63', '#3A2E28', '#7D7266'];
 
 export default async function Home() {
-  const [lista, bs, cs, fotos] = await Promise.all([destaques(), bairros(), construtoras(), fotosSite()]);
+  const [lista, bs, cs, capaRecente] = await Promise.all([destaques(), bairros(), construtoras(), ultimaCapa()]);
   const semana = lista.find((p) => p.principal) ?? lista[0];
   const listaB = bs.length >= 3 ? bs : BAIRROS_PADRAO;
-  const casal = fotos.foto_casal;
   // repete os logos até preencher a fita, e duplica para o loop contínuo
   const base = cs.length ? Array.from({ length: Math.max(1, Math.ceil(8 / cs.length)) }, () => cs).flat() : [];
 
@@ -61,7 +60,7 @@ export default async function Home() {
             </div>
           </div>
           <div className="s-capa">
-            {semana?.capa ? <img src={midiaUrl(semana.capa)} alt="" fetchPriority="high" /> : casal ? <img src={midiaUrl(casal.key)} alt="Sumaia e Allan" fetchPriority="high" /> : <img className="simb" src="/simbolo-clara.svg" alt="" />}
+            {semana?.capa ? <img src={midiaUrl(semana.capa)} alt="" fetchPriority="high" /> : capaRecente ? <img src={midiaUrl(capaRecente)} alt="" fetchPriority="high" /> : <img className="simb" src="/simbolo-clara.svg" alt="" />}
             <div className="chips">
               <a href={WHATS} target="_blank" rel="noreferrer">Agendar visita</a>
               <a href={INSTAGRAM} target="_blank" rel="noreferrer">2.500+ no Instagram</a>
