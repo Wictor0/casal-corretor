@@ -586,9 +586,19 @@ html:has(.s-lb){overflow:hidden}
 }
 @media (max-width:370px){.s .s-im-hero .seg span{font-size:11.5px;padding:10px 4px}}
 
-/* ===== barrinha de rolagem dos carrosséis ===== */
-.s-car-barra{position:relative;height:4px;border-radius:4px;background:rgba(58,46,40,.12);margin:14px auto 0;width:min(220px,60%)}
-.s-car-barra i{position:absolute;top:0;bottom:0;border-radius:4px;background:var(--cafe);transition:left .15s linear}
-.s-dest .s-car-barra{margin-top:18px}
-.s-hero .s-car-barra{margin-top:10px}
-@media (min-width:641px){.s-stats+.s-car-barra{display:none}}
+
+
+/* sem barra de rolagem nativa nos carrosséis (só o deslize) */
+.s-stats,.s-imv-sim .grade{scrollbar-width:none}
+.s-stats::-webkit-scrollbar,.s-imv-sim .grade::-webkit-scrollbar{display:none}
+
+/* barra de resultados: contagem + ordenar */
+.s-im-res .barra{flex-wrap:nowrap}
+.s-im-res .barra .ordem{position:relative;display:flex;align-items:center;gap:8px}
+.s-im-res .barra .ordem i{display:none}
+@media (max-width:900px){
+  .s .s-im-res .barra{padding:6px 6px 6px 22px;min-height:56px}
+  .s-im-res .barra .ordem .txt{display:none}
+  .s-im-res .barra .ordem i{display:flex;width:44px;height:44px;border-radius:50%;background:var(--off);color:var(--cafe);align-items:center;justify-content:center}
+  .s .s-im-res .barra .ordem select{position:absolute;inset:0;opacity:0;width:100%;height:100%;padding:0!important;cursor:pointer}
+}

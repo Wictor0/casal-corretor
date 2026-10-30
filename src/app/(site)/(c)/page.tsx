@@ -5,7 +5,6 @@ import { bairros, construtoras, destaques, fotosSite, infoCurta, precoCurto, INS
 import { Seta, SETA_BAIXO } from '../icones';
 import Trilho from '../Trilho';
 import Segmentado from '../Segmentado';
-import Carrossel from '../Carrossel';
 import { exibirCodigo, slugImovel } from '@/lib/codigo';
 
 export const dynamic = 'force-dynamic';
@@ -57,9 +56,9 @@ export default async function Home() {
               <Link className="pill dark" href="/imoveis">Ver imóveis<span className="seta"><Seta d={SETA_BAIXO} /></span></Link>
               <a className="pill light" href={WHATS} target="_blank" rel="noreferrer">Anunciar meu imóvel</a>
             </div>
-            <Carrossel className="s-stats">
+            <div className="s-stats">
               {STATS.map((s) => <div key={s.n}><i style={{ background: s.cor }} /><b>{s.n}<em>{s.suf}</em></b><span>{s.label}</span></div>)}
-            </Carrossel>
+            </div>
           </div>
           <div className="s-capa">
             {semana?.capa ? <img src={midiaUrl(semana.capa)} alt="" fetchPriority="high" /> : casal ? <img src={midiaUrl(casal.key)} alt="Sumaia e Allan" fetchPriority="high" /> : <img className="simb" src="/simbolo-clara.svg" alt="" />}

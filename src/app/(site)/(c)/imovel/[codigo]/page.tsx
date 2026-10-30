@@ -9,7 +9,6 @@ import { CONTATOS, fotosSite, WHATS } from '@/lib/site';
 import { Seta } from '../../../icones';
 import Galeria from './Galeria';
 import Descricao from './Descricao';
-import Carrossel from '../../../Carrossel';
 
 export const dynamic = 'force-dynamic';
 type P = { params: Promise<{ codigo: string }> };
@@ -199,14 +198,14 @@ export default async function Imovel({ params }: P) {
       {parecidos.length > 0 && (
         <section className="w s-imv-sim reveal">
           <h2>{terreno ? <>Outras <span className="ser">oportunidades</span></> : <>Você também pode <span className="ser">gostar</span></>}</h2>
-          <Carrossel className="grade">
+          <div className="grade">
             {parecidos.map((p, k) => (
               <Link key={p.id} href={`/imovel/${slugImovel(p)}`} className="s-card lift zoom" style={{ background: ['#6B6F63', '#3A2E28', '#7D7266'][k] }}>
                 {p.thumb && <img src={midiaUrl(p.thumb)} alt="" loading="lazy" />}
                 <span className="bt"><strong>{p.preco ? brl(p.preco) + (p.negocio === 'aluguel' ? '/mês' : '') : 'Sob consulta'}</strong><b>{p.titulo}</b><small>{exibirCodigo(p.codigo)}{p.bairro ? ` · ${p.bairro}` : ''}</small></span>
               </Link>
             ))}
-          </Carrossel>
+          </div>
         </section>
       )}
     </main>

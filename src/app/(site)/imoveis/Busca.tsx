@@ -108,8 +108,10 @@ export default function Busca({ f, op, total, children }: { f: Filtros; op: Opco
         <div className="s-im-res">
           <div className="barra">
             <span aria-live="polite"><b>{total}</b> {total === 1 ? 'imóvel encontrado' : 'imóveis encontrados'}</span>
-            <label>Ordenar
-              <select name="ordem" defaultValue={f.ordem}>
+            <label className="ordem" title="Ordenar">
+              <span className="txt">Ordenar</span>
+              <i aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 4v16M3.5 16.5 7 20l3.5-3.5M17 20V4M13.5 7.5 17 4l3.5 3.5" /></svg></i>
+              <select name="ordem" defaultValue={f.ordem} aria-label="Ordenar">
                 <option value="recentes">Mais recentes</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option><option value="area">Maior área</option>
               </select>
             </label>
