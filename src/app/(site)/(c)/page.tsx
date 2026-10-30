@@ -4,6 +4,8 @@ import { NEGOCIOS, TIPOS } from '@/lib/formato';
 import { bairros, construtoras, destaques, fotosSite, infoCurta, precoCurto, INSTAGRAM, WHATS } from '@/lib/site';
 import { Seta, SETA_BAIXO } from '../icones';
 import Trilho from '../Trilho';
+import Segmentado from '../Segmentado';
+import Carrossel from '../Carrossel';
 import { exibirCodigo, slugImovel } from '@/lib/codigo';
 
 export const dynamic = 'force-dynamic';
@@ -55,9 +57,9 @@ export default async function Home() {
               <Link className="pill dark" href="/imoveis">Ver imóveis<span className="seta"><Seta d={SETA_BAIXO} /></span></Link>
               <a className="pill light" href={WHATS} target="_blank" rel="noreferrer">Anunciar meu imóvel</a>
             </div>
-            <div className="s-stats">
+            <Carrossel className="s-stats">
               {STATS.map((s) => <div key={s.n}><i style={{ background: s.cor }} /><b>{s.n}<em>{s.suf}</em></b><span>{s.label}</span></div>)}
-            </div>
+            </Carrossel>
           </div>
           <div className="s-capa">
             {semana?.capa ? <img src={midiaUrl(semana.capa)} alt="" fetchPriority="high" /> : casal ? <img src={midiaUrl(casal.key)} alt="Sumaia e Allan" fetchPriority="high" /> : <img className="simb" src="/simbolo-clara.svg" alt="" />}
@@ -78,11 +80,7 @@ export default async function Home() {
         </section>
 
         <form className="s-busca reveal" action="/imoveis" role="search">
-          <div className="modo" role="radiogroup" aria-label="Pretensão">
-            {Object.entries(NEGOCIOS).map(([k, v], i) => (
-              <label key={k}><input type="radio" name="negocio" value={k} defaultChecked={i === 0} /><span>{k === 'venda' ? 'Comprar' : k === 'aluguel' ? 'Alugar' : v}</span></label>
-            ))}
-          </div>
+          <Segmentado name="negocio" rotulo="Pretensão" className="modo" inicial="venda" opcoes={[['venda', 'Comprar'], ['aluguel', 'Alugar'], ['terreno', 'Terrenos e retrofit']]} />
           <label className="c"><span>Tipo</span><select name="tipo" defaultValue=""><option value="">Todos os tipos</option>{TIPOS.map((t) => <option key={t}>{t}</option>)}</select></label>
           <label className="c"><span>Bairro ou cidade</span><input name="local" placeholder="Ex.: Vila Mariana" /></label>
           <label className="c" style={{ flexBasis: 140 }}><span>Código</span><input name="codigo" placeholder="CC1001" /></label>

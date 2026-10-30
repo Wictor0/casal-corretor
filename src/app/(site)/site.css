@@ -566,3 +566,29 @@ html:has(.s-lb){overflow:hidden}
 .s-carrega{min-height:62vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;opacity:0;animation:s-aparece .4s ease .25s forwards}
 .s-carrega .obra-svg{width:150px}
 .s-carrega span{font-size:12px;font-weight:300;letter-spacing:.32em;text-transform:uppercase;color:var(--dourado-texto);padding-left:.32em}
+
+/* ===== seletor com destaque que escorrega ===== */
+.s .s-segm{position:relative;display:flex;flex-wrap:nowrap;isolation:isolate}
+.s .s-segm .ind{position:absolute;top:4px;bottom:4px;left:0;border-radius:40px;background:var(--grafite);z-index:-1;transition:transform .5s cubic-bezier(.3,.8,.2,1),width .5s cubic-bezier(.3,.8,.2,1),opacity .2s}
+.s .s-segm:not([data-medido]) input:checked+span{background:var(--grafite);color:var(--off)}
+.s .s-segm[data-medido] input:checked+span{background:transparent!important;color:var(--off)}
+.s .s-segm span{white-space:nowrap;transition:color .35s ease .05s,background-color .3s}
+.s .s-segm label:hover input:not(:checked)+span{background:transparent!important;color:var(--grafite)}
+@media (max-width:700px){
+  .s .s-busca .modo{width:100%}
+  .s .s-busca .modo label{flex:1 1 auto}
+  .s .s-busca .modo span{padding:12px 8px;font-size:13px;text-align:center}
+}
+@media (max-width:900px){
+  .s .s-im-hero .seg{width:100%;justify-content:space-between}
+  .s .s-im-hero .seg label{flex:1 1 auto}
+  .s .s-im-hero .seg span{padding:11px 6px;font-size:12.5px;text-align:center}
+}
+@media (max-width:370px){.s .s-im-hero .seg span{font-size:11.5px;padding:10px 4px}}
+
+/* ===== barrinha de rolagem dos carrosséis ===== */
+.s-car-barra{position:relative;height:4px;border-radius:4px;background:rgba(58,46,40,.12);margin:14px auto 0;width:min(220px,60%)}
+.s-car-barra i{position:absolute;top:0;bottom:0;border-radius:4px;background:var(--cafe);transition:left .15s linear}
+.s-dest .s-car-barra{margin-top:18px}
+.s-hero .s-car-barra{margin-top:10px}
+@media (min-width:641px){.s-stats+.s-car-barra{display:none}}

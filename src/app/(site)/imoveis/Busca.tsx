@@ -2,6 +2,7 @@
 import { useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Filtros } from '@/lib/busca';
+import Segmentado from '../Segmentado';
 
 type Opcoes = { carac: { id: number; nome: string }[]; bairros: string[]; tipos: string[] };
 const PRET = [['todos', 'Todos'], ['venda', 'Comprar'], ['aluguel', 'Alugar'], ['terreno', 'Terrenos e retrofit']] as const;
@@ -37,6 +38,7 @@ export default function Busca({ f, op, total, children }: { f: Filtros; op: Opco
       else if (el.type === 'search' || el.type === 'text') el.value = '';
     }
     setNeg('todos');
+    form.current!.dispatchEvent(new Event('reset'));
     start(() => router.replace('/imoveis', { scroll: false }));
   };
   const precos = neg === 'aluguel' ? PRECO_ALUGUEL : PRECO_VENDA;
@@ -51,9 +53,7 @@ export default function Busca({ f, op, total, children }: { f: Filtros; op: Opco
             <h1>Encontre o seu <span className="ser">lugar</span></h1>
             <p>Curadoria de lares com personalidade em São Paulo. Use os filtros para chegar exatamente no que você procura.</p>
           </div>
-          <div className="seg" role="radiogroup" aria-label="Pretensão">
-            {PRET.map(([v, l]) => <label key={v}><input type="radio" name="negocio" value={v} defaultChecked={f.negocio === v} /><span>{l}</span></label>)}
-          </div>
+          <Segmentado name="negocio" rotulo="Pretensão" className="seg" inicial={f.negocio} opcoes={PRET} />
         </div>
       </section>
 
