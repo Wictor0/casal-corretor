@@ -9,6 +9,7 @@ import { CONTATOS, fotosSite, WHATS } from '@/lib/site';
 import { Seta } from '../../../icones';
 import Galeria from './Galeria';
 import Descricao from './Descricao';
+import Compartilhar from './Compartilhar';
 
 export const dynamic = 'force-dynamic';
 type P = { params: Promise<{ codigo: string }> };
@@ -173,7 +174,10 @@ export default async function Imovel({ params }: P) {
             </div>
             {!terreno && m2 > 0 && <span className="nota">≈ {brl(Math.round(i.preco! / m2))}/m²</span>}
             {terreno && <span className="nota">Preço do imóvel no estado atual. Reforma e projeto ficam por conta do comprador.</span>}
+            <div className="cta-linha">
             <a className="cta" href={`${WHATS}?text=${msg}`} target="_blank" rel="noreferrer">{terreno ? 'Quero analisar essa oportunidade' : 'Tenho interesse'}<span><Seta /></span></a>
+              <Compartilhar titulo={`${i.titulo} · ${codigo}`} />
+            </div>
           </div>
           {i.status === 'negociacao' && <div className="bloco aviso"><b>Em negociação, mas ainda aceita propostas</b><span>Fale com a gente antes que feche.</span></div>}
           {i.status === 'vendido' && <div className="bloco aviso"><b>Esse já foi {aluguel ? 'alugado' : 'vendido'}</b><span>Mas a gente encontra outro do seu jeito.</span></div>}

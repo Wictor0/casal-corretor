@@ -754,3 +754,9 @@ html:has(.s-lb){overflow:hidden}
 .s-sb .hero{width:100%;min-width:0;min-height:420px}
 @media (min-width:900px){.s-sb .hero{aspect-ratio:16/9;min-height:0;max-height:720px}}
 .s-sb .hero>img{object-position:center 22%}
+
+.s-imv .cta-linha{display:flex;gap:8px;align-items:stretch}
+.s-imv .cta-linha .cta{flex:1;min-width:0}
+.s-imv .compart{flex:none;width:58px;border:none;border-radius:40px;background:var(--off);color:var(--cafe);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background-color .3s,color .3s}
+.s-imv .compart.ok{background:var(--salvia);color:#fff}
+@media (hover:hover){.s-imv .compart:hover{background:var(--grafite);color:var(--off)}}
