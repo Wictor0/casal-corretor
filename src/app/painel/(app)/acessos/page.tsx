@@ -3,6 +3,7 @@ import { sql, and, gte, eq, desc, count, countDistinct, isNotNull } from 'drizzl
 import { db, t } from '@/db';
 import { exibirCodigo } from '@/lib/codigo';
 import GeradorLink from './GeradorLink';
+import { trafegoCloudflare } from '@/lib/cloudflare';
 
 const PERIODOS = { '7': 'Últimos 7 dias', '30': 'Últimos 30 dias', '90': 'Últimos 90 dias' } as const;
 const NOME_PAG: Record<string, string> = { '/': 'Início', '/imoveis': 'Lista de imóveis', '/sobre': 'Sobre nós', '/contato': 'Contato', '/parceiro': 'Seja parceiro' };
@@ -48,6 +49,7 @@ export default async function Acessos({ searchParams }: { searchParams: Promise<
       .from(v).where(and(noPeriodo, isNotNull(v.campanha))).groupBy(v.campanha, v.origem).orderBy(desc(sql`3`)).limit(10),
     db.select({ k: v.dispositivo, v: countDistinct(sql`${v.visitante} || ${diaSp}`) }).from(v).where(pv).groupBy(v.dispositivo).orderBy(desc(sql`2`)),
   ]);
+  const cf = await trafegoCloudflare(dias);
   const whats = porTipo.find((x) => x.tipo === 'whats')?.v ?? 0;
   const comp = porTipo.find((x) => x.tipo === 'compartilhar')?.v ?? 0;
 
@@ -85,6 +87,29 @@ export default async function Acessos({ searchParams }: { searchParams: Promise<
         </div>
         <div className="ac-eixo"><span>{serie[0].dia.split('-').reverse().slice(0, 2).join('/')}</span><span>pico: {n(maxDia)}</span><span>hoje</span></div>
       </div>
+
+
+      {cf && (
+        <div className="card">
+          <h2 className="ac-t">Tráfego total do domínio <span className="chip">Cloudflare</span></h2>
+          {cf.erro ? <p className="hint">{cf.erro}</p> : (() => {
+            const m = new Map(cf.dias.map((d) => [d.dia, d]));
+            const s = Array.from({ length: dias }, (_, i) => { const d = new Date(Date.now() - (dias - 1 - i) * 864e5).toISOString().slice(0, 10); return { dia: d, v: m.get(d)?.visitantes ?? 0, p: m.get(d)?.paginas ?? 0 }; });
+            const mx = Math.max(...s.map((d) => d.v), 1);
+            const totV = s.reduce((a, d) => a + d.v, 0), totP = s.reduce((a, d) => a + d.p, 0);
+            const totPais = cf.paises.reduce((a, x) => a + x.v, 0);
+            return (<>
+              <p className="hint">Conta desde o lançamento do site, inclusive os dias antes das métricas acima. Inclui robôs e buscadores, então os números são maiores que os reais — sirvam para ver o movimento, os picos e a tendência.</p>
+              <div className="ac-mini"><span><b>{n(totV)}</b> visitantes (soma dos dias)</span><span><b>{n(totP)}</b> páginas vistas</span><span>pico: <b>{n(mx)}</b> num dia</span></div>
+              <div className="ac-grafico cf">
+                {s.map((d) => <div key={d.dia} className="ac-col" title={`${d.dia.split('-').reverse().join('/')}: ${d.v} visitantes, ${d.p} páginas`}><div style={{ height: `${(d.v / mx) * 100}%` }} /></div>)}
+              </div>
+              <div className="ac-eixo"><span>{s[0].dia.split('-').reverse().slice(0, 2).join('/')}</span><span>hoje</span></div>
+              {cf.paises.length > 0 && <><h3 className="ac-t" style={{ fontSize: 14, marginTop: 8 }}>Países (acessos)</h3><Barras total={totPais} itens={cf.paises.map((x) => ({ k: x.nome, v: x.v, nome: x.nome }))} /></>}
+            </>);
+          })()}
+        </div>
+      )}
 
       <div className="ac-duas">
         <div className="card"><h2 className="ac-t">De onde vieram</h2>

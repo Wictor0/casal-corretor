@@ -151,3 +151,8 @@ textarea.in{resize:vertical;font-family:inherit}
 .ac-tab a:hover{text-decoration:underline}
 .ac-link{font-size:13px;background:var(--off);border-radius:14px;padding:12px 14px;word-break:break-all;color:var(--cafe)}
 @media (max-width:1000px){.ac-nums{grid-template-columns:1fr 1fr}.ac-duas{grid-template-columns:1fr}}
+.ac-t .chip{margin-left:8px;vertical-align:middle}
+.ac-mini{display:flex;gap:24px;flex-wrap:wrap;font-size:14px;color:var(--texto2)}
+.ac-mini b{color:var(--cafe);font-size:18px}
+.ac-grafico.cf{height:140px}
+.ac-grafico.cf .ac-col div{background:var(--taupe)}
