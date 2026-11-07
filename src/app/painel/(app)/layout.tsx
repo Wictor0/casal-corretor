@@ -18,6 +18,7 @@ export default async function PainelLayout({ children }: { children: React.React
         <NavLink href="/painel/construtoras">Construtoras parceiras</NavLink>
         <NavLink href="/painel/parceiros">Corretores parceiros{n > 0 && <span className="badge">{n}</span>}</NavLink>
         <NavLink href="/painel/site">Fotos do site</NavLink>
+        <NavLink href="/painel/acessos">Acessos do site</NavLink>
         <span className="sp" />
         <span className="eu">{u.nome}</span>
         <form action={sair}><button>Sair</button></form>

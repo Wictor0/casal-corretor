@@ -15,6 +15,13 @@
       "when": 1793208163143,
       "tag": "0001_powerful_hiroim",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794069279663,
+      "tag": "0002_mysterious_khan",
+      "breakpoints": true
     }
   ]
 }

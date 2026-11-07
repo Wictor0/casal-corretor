@@ -5,6 +5,7 @@ export default function Compartilhar({ titulo }: { titulo: string }) {
   const [ok, setOk] = useState(false);
   const clique = async () => {
     const url = location.href.split('?')[0];
+    window.dispatchEvent(new Event('cc:compartilhar'));
     try {
       if (navigator.share) { await navigator.share({ title: titulo, url }); return; }
       await navigator.clipboard.writeText(url); setOk(true); setTimeout(() => setOk(false), 2000);

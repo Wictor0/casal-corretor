@@ -121,3 +121,33 @@ textarea.in{resize:vertical;font-family:inherit}
 .bola-bloco{border-top:1px solid #EEE9DF;padding-top:16px;display:flex;flex-direction:column;gap:12px}
 .bola{width:64px;height:64px;border-radius:50%;overflow:hidden;background:var(--areia);flex:none;display:block}
 .bola img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* Acessos do site */
+.ac-nums{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.ac-nums .card{gap:6px}
+.ac-nums small{font-size:13px;font-weight:600;color:var(--texto2)}
+.ac-nums b{font-family:var(--serif);font-size:40px;font-weight:500;color:var(--cafe);line-height:1.1}
+.ac-nums .destaque{background:var(--cafe)}
+.ac-nums .destaque small,.ac-nums .destaque .hint{color:var(--dourado-claro)}
+.ac-nums .destaque b{color:var(--off)}
+.ac-t{font-size:16px;font-weight:600;margin:0;color:var(--cafe)}
+.ac-duas{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ac-grafico{display:flex;align-items:flex-end;gap:3px;height:180px}
+.ac-col{flex:1;height:100%;display:flex;align-items:flex-end;border-radius:6px}
+.ac-col div{width:100%;min-height:2px;background:var(--dourado);border-radius:6px 6px 2px 2px;transition:background .15s}
+.ac-col:hover div{background:var(--cafe)}
+.ac-eixo{display:flex;justify-content:space-between;font-size:12px;color:var(--salvia)}
+.ac-barras{display:flex;flex-direction:column;gap:6px}
+.ac-linha{position:relative;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:12px;background:var(--off);overflow:hidden;font-size:14px}
+.ac-fundo{position:absolute;inset:0 auto 0 0;background:#E6DCCB;border-radius:12px}
+.ac-linha>*:not(.ac-fundo){position:relative}
+.ac-nome{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ac-linha small{width:38px;text-align:right;color:var(--texto2)}
+.ac-tab{width:100%;border-collapse:collapse;font-size:14px}
+.ac-tab th{text-align:left;font-size:12px;font-weight:600;color:var(--texto2);padding:0 8px 8px}
+.ac-tab th:not(:first-child),.ac-tab td:not(:first-child){text-align:right;width:90px}
+.ac-tab td{padding:10px 8px;border-top:1px solid #EEE9DF}
+.ac-tab a{color:inherit;text-decoration:none}
+.ac-tab a:hover{text-decoration:underline}
+.ac-link{font-size:13px;background:var(--off);border-radius:14px;padding:12px 14px;word-break:break-all;color:var(--cafe)}
+@media (max-width:1000px){.ac-nums{grid-template-columns:1fr 1fr}.ac-duas{grid-template-columns:1fr}}

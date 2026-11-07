@@ -121,3 +121,17 @@ export const configuracoes = pgTable('configuracoes', {
   valor: jsonb('valor'),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 });
+
+// Métricas próprias do site (sem cookie): um registro por página vista ou clique de contato
+export const visitas = pgTable('visitas', {
+  id: serial('id').primaryKey(),
+  criadoEm: timestamp('criado_em', { withTimezone: true }).defaultNow().notNull(),
+  tipo: text('tipo').notNull().default('pv'), // pv | whats | compartilhar
+  caminho: text('caminho').notNull(),
+  imovelId: integer('imovel_id').references(() => imoveis.id, { onDelete: 'set null' }),
+  visitante: text('visitante').notNull(), // hash diário de IP + navegador, sem dado pessoal
+  origem: text('origem'), // utm_source ou site de onde veio
+  meio: text('meio'), // utm_medium
+  campanha: text('campanha'), // utm_campaign
+  dispositivo: text('dispositivo'),
+}, (x) => [index('visitas_data_idx').on(x.criadoEm), index('visitas_imovel_idx').on(x.imovelId)]);
