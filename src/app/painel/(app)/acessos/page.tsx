@@ -59,7 +59,8 @@ export default async function Acessos({ searchParams }: { searchParams: Promise<
     const d = new Date(Date.now() - (dias - 1 - i) * 864e5).toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
     return { dia: d, p: mapa.get(d)?.p ?? 0, v: mapa.get(d)?.v ?? 0 };
   });
-  const maxDia = Math.max(...serie.map((d) => d.p), 1);
+  const picoDia = Math.max(...serie.map((d) => d.p));
+  const maxDia = Math.max(picoDia, 1);
   const totPessoas = origens.reduce((s, o) => s + o.v, 0);
 
   return (
@@ -85,7 +86,7 @@ export default async function Acessos({ searchParams }: { searchParams: Promise<
             </div>
           ))}
         </div>
-        <div className="ac-eixo"><span>{serie[0].dia.split('-').reverse().slice(0, 2).join('/')}</span><span>pico: {n(maxDia)}</span><span>hoje</span></div>
+        <div className="ac-eixo"><span>{serie[0].dia.split('-').reverse().slice(0, 2).join('/')}</span><span>{picoDia ? `pico: ${n(picoDia)}` : ''}</span><span>hoje</span></div>
       </div>
 
 
@@ -95,17 +96,15 @@ export default async function Acessos({ searchParams }: { searchParams: Promise<
           {cf.erro ? <p className="hint">{cf.erro}</p> : (() => {
             const m = new Map(cf.dias.map((d) => [d.dia, d]));
             const s = Array.from({ length: dias }, (_, i) => { const d = new Date(Date.now() - (dias - 1 - i) * 864e5).toISOString().slice(0, 10); return { dia: d, v: m.get(d)?.visitantes ?? 0, p: m.get(d)?.paginas ?? 0 }; });
-            const mx = Math.max(...s.map((d) => d.v), 1);
+            const pico = Math.max(...s.map((d) => d.v)), mx = Math.max(pico, 1);
             const totV = s.reduce((a, d) => a + d.v, 0), totP = s.reduce((a, d) => a + d.p, 0);
-            const totPais = cf.paises.reduce((a, x) => a + x.v, 0);
             return (<>
               <p className="hint">Conta desde o lançamento do site, inclusive os dias antes das métricas acima. Inclui robôs e buscadores, então os números são maiores que os reais — sirvam para ver o movimento, os picos e a tendência.</p>
-              <div className="ac-mini"><span><b>{n(totV)}</b> visitantes (soma dos dias)</span><span><b>{n(totP)}</b> páginas vistas</span><span>pico: <b>{n(mx)}</b> num dia</span></div>
+              <div className="ac-mini"><span><b>{n(totV)}</b> visitantes (soma dos dias)</span><span><b>{n(totP)}</b> páginas vistas</span><span>pico: <b>{n(pico)}</b> num dia</span></div>
               <div className="ac-grafico cf">
                 {s.map((d) => <div key={d.dia} className="ac-col" title={`${d.dia.split('-').reverse().join('/')}: ${d.v} visitantes, ${d.p} páginas`}><div style={{ height: `${(d.v / mx) * 100}%` }} /></div>)}
               </div>
               <div className="ac-eixo"><span>{s[0].dia.split('-').reverse().slice(0, 2).join('/')}</span><span>hoje</span></div>
-              {cf.paises.length > 0 && <><h3 className="ac-t" style={{ fontSize: 14, marginTop: 8 }}>Países (acessos)</h3><Barras total={totPais} itens={cf.paises.map((x) => ({ k: x.nome, v: x.v, nome: x.nome }))} /></>}
             </>);
           })()}
         </div>
