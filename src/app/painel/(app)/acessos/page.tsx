@@ -3,6 +3,7 @@ import { sql, and, gte, eq, desc, count, countDistinct, isNotNull } from 'drizzl
 import { db, t } from '@/db';
 import { exibirCodigo } from '@/lib/codigo';
 import GeradorLink from './GeradorLink';
+import Grafico from './Grafico';
 import { trafegoCloudflare } from '@/lib/cloudflare';
 
 const PERIODOS = { '7': 'Últimos 7 dias', '30': 'Últimos 30 dias', '90': 'Últimos 90 dias' } as const;
@@ -39,7 +40,7 @@ export default async function Acessos({ searchParams }: { searchParams: Promise<
     db.select({ v: count() }).from(v).where(pv),
     db.select({ v: countDistinct(sql`${v.visitante} || ${diaSp}`) }).from(v).where(pv),
     db.select({ tipo: v.tipo, v: count() }).from(v).where(noPeriodo).groupBy(v.tipo),
-    db.select({ dia: diaSp, v: count(), p: countDistinct(v.visitante) }).from(v).where(pv).groupBy(diaSp).orderBy(diaSp),
+    db.select({ dia: diaSp, v: sql<number>`count(*) filter (where ${v.tipo} = 'pv')`.mapWith(Number), p: sql<number>`count(distinct ${v.visitante}) filter (where ${v.tipo} = 'pv')`.mapWith(Number), w: sql<number>`count(*) filter (where ${v.tipo} = 'whats')`.mapWith(Number) }).from(v).where(noPeriodo).groupBy(diaSp).orderBy(diaSp),
     db.select({ k: v.caminho, v: count() }).from(v).where(and(pv, sql`${v.imovelId} is null`)).groupBy(v.caminho).orderBy(desc(count())).limit(8),
     db.select({ id: v.imovelId, codigo: t.imoveis.codigo, titulo: t.imoveis.titulo, v: count(), w: sql<number>`count(*) filter (where ${v.tipo} = 'whats')`.mapWith(Number) })
       .from(v).innerJoin(t.imoveis, eq(t.imoveis.id, v.imovelId)).where(noPeriodo).groupBy(v.imovelId, t.imoveis.codigo, t.imoveis.titulo)
@@ -57,10 +58,8 @@ export default async function Acessos({ searchParams }: { searchParams: Promise<
   const mapa = new Map(porDia.map((d) => [d.dia, d]));
   const serie = Array.from({ length: dias }, (_, i) => {
     const d = new Date(Date.now() - (dias - 1 - i) * 864e5).toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
-    return { dia: d, p: mapa.get(d)?.p ?? 0, v: mapa.get(d)?.v ?? 0 };
+    return { dia: d, p: mapa.get(d)?.p ?? 0, v: mapa.get(d)?.v ?? 0, w: mapa.get(d)?.w ?? 0 };
   });
-  const picoDia = Math.max(...serie.map((d) => d.p));
-  const maxDia = Math.max(picoDia, 1);
   const totPessoas = origens.reduce((s, o) => s + o.v, 0);
 
   return (
@@ -79,14 +78,7 @@ export default async function Acessos({ searchParams }: { searchParams: Promise<
 
       <div className="card">
         <h2 className="ac-t">Visitantes por dia</h2>
-        <div className="ac-grafico" role="img" aria-label="Visitantes por dia">
-          {serie.map((d) => (
-            <div key={d.dia} className="ac-col" title={`${d.dia.split('-').reverse().join('/')}: ${d.p} visitantes, ${d.v} páginas`}>
-              <div style={{ height: `${(d.p / maxDia) * 100}%` }} />
-            </div>
-          ))}
-        </div>
-        <div className="ac-eixo"><span>{serie[0].dia.split('-').reverse().slice(0, 2).join('/')}</span><span>{picoDia ? `pico: ${n(picoDia)}` : ''}</span><span>hoje</span></div>
+        <Grafico legenda="visitantes" dados={serie.map((d) => ({ dia: d.dia, valor: d.p, linhas: [['visitantes', d.p], ['páginas vistas', d.v], ['cliques no WhatsApp', d.w]] }))} />
       </div>
 
 
@@ -100,11 +92,8 @@ export default async function Acessos({ searchParams }: { searchParams: Promise<
             const totV = s.reduce((a, d) => a + d.v, 0), totP = s.reduce((a, d) => a + d.p, 0);
             return (<>
               <p className="hint">Conta desde o lançamento do site, inclusive os dias antes das métricas acima. Inclui robôs e buscadores, então os números são maiores que os reais — sirvam para ver o movimento, os picos e a tendência.</p>
-              <div className="ac-mini"><span><b>{n(totV)}</b> visitantes (soma dos dias)</span><span><b>{n(totP)}</b> páginas vistas</span><span>pico: <b>{n(pico)}</b> num dia</span></div>
-              <div className="ac-grafico cf">
-                {s.map((d) => <div key={d.dia} className="ac-col" title={`${d.dia.split('-').reverse().join('/')}: ${d.v} visitantes, ${d.p} páginas`}><div style={{ height: `${(d.v / mx) * 100}%` }} /></div>)}
-              </div>
-              <div className="ac-eixo"><span>{s[0].dia.split('-').reverse().slice(0, 2).join('/')}</span><span>hoje</span></div>
+              <div className="ac-mini"><span><b>{n(totV)}</b> visitantes (soma dos dias)</span><span><b>{n(totP)}</b> páginas vistas</span><span>pico: <b>{n(pico)}</b> num dia</span><span className="hint">Passe o mouse ou toque numa barra para ver o dia.</span></div>
+              <Grafico variante="cf" legenda="visitantes" dados={s.map((d) => ({ dia: d.dia, valor: d.v, linhas: [['visitantes', d.v], ['páginas vistas', d.p]] }))} />
             </>);
           })()}
         </div>
