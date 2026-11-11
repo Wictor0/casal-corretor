@@ -4,6 +4,7 @@ import { db, t } from '@/db';
 import { exibirCodigo } from '@/lib/codigo';
 import GeradorLink from './GeradorLink';
 import Grafico from './Grafico';
+import Ajuda from './Ajuda';
 import { trafegoCloudflare } from '@/lib/cloudflare';
 
 const PERIODOS = { '7': 'Últimos 7 dias', '30': 'Últimos 30 dias', '90': 'Últimos 90 dias' } as const;
@@ -65,16 +66,6 @@ export default async function Acessos({ searchParams }: { searchParams: Promise<
   return (
     <div className="stack">
       <div className="topo"><div><h1>Acessos do site</h1><p className="sub">Quantas pessoas visitaram, de onde vieram e o que mais chamou atenção. Visitas de vocês logados no painel não entram na conta.</p></div></div>
-      <details className="ac-guia">
-        <summary>Por que os números do Cloudflare são maiores que os daqui?</summary>
-        <div>
-          <p>Esta página mostra duas contagens diferentes, e é normal elas não baterem.</p>
-          <p><b>Os números de cima (visitantes, WhatsApp, campanhas)</b> contam só pessoas de verdade, que abriram o site no celular ou no computador. <b>São esses que vocês devem acompanhar</b> para saber quantas pessoas vieram e quantas chamaram no WhatsApp.</p>
-          <p><b>O bloco “Tráfego total do domínio” (Cloudflare)</b> conta tudo que acessa o endereço do site, inclusive robôs: o Google lendo as páginas para aparecer na busca, a prévia do link quando alguém compartilha no WhatsApp ou Instagram, e programas automáticos do mundo todo. Por isso ele sempre mostra mais. Uma dica: quando aparecem mais “visitantes” do que “páginas vistas” num dia, a diferença é de robôs.</p>
-          <p>O dia também vira em horários diferentes: aqui o dia segue o horário de São Paulo; no Cloudflare, vira às 21h. Então a barra de “hoje” pode não bater.</p>
-          <p><b>Resumindo:</b> use o Cloudflare como termômetro, para ver se teve pico e se o movimento está subindo. Para saber quantas pessoas reais vieram e quantos contatos o site gerou, use os números de cima.</p>
-        </div>
-      </details>
       <div className="row">
         {Object.entries(PERIODOS).map(([k, l]) => <Link key={k} className={'btn sm' + (String(dias) === k ? ' dark' : '')} href={`/painel/acessos?p=${k}`}>{l}</Link>)}
       </div>
@@ -94,14 +85,14 @@ export default async function Acessos({ searchParams }: { searchParams: Promise<
 
       {cf && (
         <div className="card">
-          <h2 className="ac-t">Tráfego total do domínio <span className="chip">Cloudflare</span></h2>
+          <h2 className="ac-t">Tráfego total do domínio <span className="chip">Cloudflare</span><Ajuda /></h2>
           {cf.erro ? <p className="hint">{cf.erro}</p> : (() => {
             const m = new Map(cf.dias.map((d) => [d.dia, d]));
             const s = Array.from({ length: dias }, (_, i) => { const d = new Date(Date.now() - (dias - 1 - i) * 864e5).toISOString().slice(0, 10); return { dia: d, v: m.get(d)?.visitantes ?? 0, p: m.get(d)?.paginas ?? 0 }; });
             const pico = Math.max(...s.map((d) => d.v)), mx = Math.max(pico, 1);
             const totV = s.reduce((a, d) => a + d.v, 0), totP = s.reduce((a, d) => a + d.p, 0);
             return (<>
-              <p className="hint">Conta desde o lançamento do site, inclusive os dias antes das métricas de cima. Inclui robôs do Google, prévias de link e outros acessos automáticos, por isso sempre mostra mais que as pessoas reais. Use para ver picos e se o movimento está subindo — a explicação completa está no topo da página.</p>
+              <p className="hint">Conta desde o lançamento do site, incluindo acessos de robôs — por isso mostra mais que os números de cima.</p>
               <div className="ac-mini"><span><b>{n(totV)}</b> visitantes (soma dos dias)</span><span><b>{n(totP)}</b> páginas vistas</span><span>pico: <b>{n(pico)}</b> num dia</span><span className="hint">Passe o mouse ou toque numa barra para ver o dia.</span></div>
               <Grafico variante="cf" legenda="visitantes" dados={s.map((d) => ({ dia: d.dia, valor: d.v, linhas: [['visitantes', d.v], ['páginas vistas', d.p]] }))} />
             </>);
