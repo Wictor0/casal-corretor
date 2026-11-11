@@ -173,3 +173,12 @@ textarea.in{resize:vertical;font-family:inherit}
 .ac-mini{display:flex;gap:24px;flex-wrap:wrap;font-size:14px;color:var(--texto2)}
 .ac-mini b{color:var(--cafe);font-size:18px}
 .ac-grafico.cf{height:150px}
+.ac-guia{background:#fff;border-radius:22px;padding:4px 22px;font-size:14px;line-height:1.65;color:var(--texto2)}
+.ac-guia summary{cursor:pointer;padding:14px 0;font-weight:600;color:var(--cafe);list-style:none;display:flex;align-items:center;gap:10px}
+.ac-guia summary::-webkit-details-marker{display:none}
+.ac-guia summary::before{content:'?';flex:none;width:22px;height:22px;border-radius:50%;background:var(--dourado);color:var(--grafite);font-size:13px;display:inline-flex;align-items:center;justify-content:center}
+.ac-guia summary::after{content:'+';margin-left:auto;font-size:18px;color:var(--dourado-texto);transition:transform .2s}
+.ac-guia[open] summary::after{transform:rotate(45deg)}
+.ac-guia>div{padding:0 0 16px 32px;max-width:760px}
+.ac-guia p{margin:0 0 10px}
+.ac-guia b{color:var(--cafe)}
