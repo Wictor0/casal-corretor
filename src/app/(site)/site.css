@@ -563,7 +563,7 @@ html:has(.s-lb){overflow:hidden}
 @media (prefers-reduced-motion: reduce){.s-pag{animation:none}}
 /* carregamento entre páginas: a casinha em construção */
 @keyframes s-aparece{to{opacity:1}}
-.s-carrega{min-height:62vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;opacity:0;animation:s-aparece .4s ease .25s forwards}
+.s-carrega{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;opacity:0;animation:s-aparece .4s ease .25s forwards}
 .s-carrega .obra-svg{width:150px}
 .s-carrega span{font-size:12px;font-weight:300;letter-spacing:.32em;text-transform:uppercase;color:var(--dourado-texto);padding-left:.32em}
 
